@@ -2,16 +2,17 @@
 const generate = document.querySelector('#generate');
 const description = document.querySelector('textarea');
 const zipCode = document.querySelector('input');
+const feelings = document.getElementById('feelings');
 
 //api const
 const apiRootZip = 'http://api.openweathermap.org/data/2.5/weather?zip=';
 const apiRootQuery = 'http://api.openweathermap.org/data/2.5/weather?q=';
- 
-const apiKey = '&appid=9ba096bbf91......';
+const units = '&units=metric'
+const apiKey = '&appid=9ba096bbf916bed0fff3ad1f055a9072';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + 1 +'.' + d.getDate() + '.' + d.getFullYear();
+let newDate = d.getMonth() + 1 + '.' + d.getDate() + '.' + d.getFullYear();
 
 generate.addEventListener('click', clickCallBack);
 
@@ -21,33 +22,37 @@ function clickCallBack() {
     if (zipVal == '') {
         return;
     }
-    let url = apiRootZip + zipVal + apiKey;
+    let url = apiRootZip + zipVal + apiKey + units;
     //console.log(url);
 
     getWeather(url)
+
         .then(function(weatherData) {
             if (weatherData.cod == "200") {
-               // const date = weatherData
-                const temp = Math.floor(weatherData.main.temp - 273);
+                // const date = weatherData
+                const temp = Math.floor(weatherData.main.temp);
                 const desc = weatherData.weather[0].description;
-                //console.log(temp);
-                //console.log(desc);
-                postDataSend('/add', { temp, desc });
+                const feel = feelings.value;
 
-                updateContent(weatherData);
-            }
-             else
-            {
+                postDataSend('/add', {
+                        temp,
+                        desc,
+                        feel
+                    })
+                    .then(updateContent())
+            } else {
                 console.log("check zip");
+                alert("please check ZIP code");
             }
         })
+        .then()
 }
-
+ 
 // returns weatherData
 async function getWeather(url) {
     const response = await fetch(url);
     const weatherData = await response.json();
-  //  console.log(weatherData);
+    //  console.log(weatherData);
     return weatherData;
 }
 
@@ -65,12 +70,15 @@ async function postDataSend(url, weatherData) {
 
 const temp = document.getElementById('temp');
 const date = document.getElementById('date');
-//const place = document.getElementById('location');
 const content = document.getElementById('content');
 
-function updateContent(weather) {
-   // console.log(weather);
-    date.innerHTML =  newDate;
-    temp.innerHTML = 'temp in *C: ' + Math.floor(weather.main.temp - 273);
-    content.innerHTML = 'description: ' + weather.weather[0].description;;
+async function updateContent() {
+    const response = await fetch('/retrieve');
+    const dataValue = await response.json();
+
+     date.innerHTML = newDate;
+     temp.innerHTML = 'temp in *C: ' + Math.floor(dataValue.temp);
+     content.innerHTML = 'description: ' + dataValue.desc;
+     
+     console.log(dataValue)
 }
