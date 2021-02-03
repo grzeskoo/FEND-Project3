@@ -17,6 +17,13 @@
             <label for="zip">Enter Zipcode here</label>
             <input type="text" id="zip" placeholder="enter zip code here like: 64085">
         </div>
+        <div class="holder units">
+            <p class="unit-title">Choose your units (default metric):</p>
+            <label for="metric" class="radio-label">Metric</label>
+            <input type="radio" id="metric" name="units" value="metric" checked>
+            <label for="imperial" class="radio-label">Imperial</label>
+            <input type="radio" id="imperial" name="units" value="imperial">
+        </div>
         <div class="holder feel">
             <label for="feelings">How are you feeling today?</label>
             <textarea class="myInput" id="feelings" placeholder="Enter your feelings here"></textarea>
@@ -28,6 +35,7 @@
                 <div id="date"> </div>
                 <div id="temp"> </div>
                 <div id="content"> </div>
+                <div id="feelings"> </div>
             </div>
         </div>
     </div>

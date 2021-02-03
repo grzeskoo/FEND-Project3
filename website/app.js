@@ -3,11 +3,11 @@ const generate = document.querySelector('#generate');
 const description = document.querySelector('textarea');
 const zipCode = document.querySelector('input');
 const feelings = document.getElementById('feelings');
-
+ 
 //api const
 const apiRootZip = 'http://api.openweathermap.org/data/2.5/weather?zip=';
 const apiRootQuery = 'http://api.openweathermap.org/data/2.5/weather?q=';
-const units = '&units=metric'
+const apiunits = '&units='
 const apiKey = '&appid=9ba096bbf916bed0fff3ad1f055a9072';
 
 // Create a new date instance dynamically with JS
@@ -22,8 +22,15 @@ function clickCallBack() {
     if (zipVal == '') {
         return;
     }
-    let url = apiRootZip + zipVal + apiKey + units;
-    //console.log(url);
+
+    let unitsInput = document.querySelector('input[name="units"]:checked').value;
+   if(!unitsInput)
+   {
+    unitsInput ="metrics"
+   }
+
+    let url = apiRootZip + zipVal + apiunits + unitsInput + apiKey ;
+  // console.log(url);
 
     getWeather(url)
 
@@ -39,7 +46,7 @@ function clickCallBack() {
                         desc,
                         feel
                     })
-                    .then(updateContent())
+                    .then(updateContent(unitsInput))
             } else {
                 console.log("check zip");
                 alert("please check ZIP code");
@@ -71,14 +78,21 @@ async function postDataSend(url, weatherData) {
 const temp = document.getElementById('temp');
 const date = document.getElementById('date');
 const content = document.getElementById('content');
+const yourFeelings =  document.getElementById('feelings');
 
-async function updateContent() {
+/* Function to GET Project Data */
+async function updateContent(unitsInput) {
     const response = await fetch('/retrieve');
+
+    // Transform into JSON
     const dataValue = await response.json();
 
+    console.log(dataValue)
+    
+    // Write updated data to DOM elements
      date.innerHTML = newDate;
-     temp.innerHTML = 'temp in *C: ' + Math.floor(dataValue.temp);
+     temp.innerHTML = 'temp: ' + Math.floor(dataValue.temp) + ' unit type:'+ ` ${unitsInput}`;
      content.innerHTML = 'description: ' + dataValue.desc;
-     
+     yourFeelings.innerHTML = 'your feelings: ' + dataValue.feelings;
      console.log(dataValue)
 }
