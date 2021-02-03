@@ -8,7 +8,7 @@ const feelings = document.getElementById('feelings');
 const apiRootZip = 'http://api.openweathermap.org/data/2.5/weather?zip=';
 const apiRootQuery = 'http://api.openweathermap.org/data/2.5/weather?q=';
 const apiunits = '&units='
-const apiKey = '&appid=9ba096bbf916bed0fff3ad1f055a9072';
+const apiKey = '&appid=9ba096bbf916bed0f...';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
